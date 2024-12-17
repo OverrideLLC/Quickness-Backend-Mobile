@@ -1,6 +1,7 @@
 package com.quickness.application
 
 import com.quickness.routing.configureAuthRouting
+import com.quickness.routing.configureRegisterRouting
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*
@@ -12,5 +13,6 @@ fun Application.configureSerialization() {
     }
     routing {
         configureAuthRouting()
+        configureRegisterRouting()
     }
 }

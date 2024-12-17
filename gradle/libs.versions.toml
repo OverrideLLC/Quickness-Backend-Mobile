@@ -3,6 +3,11 @@ kotlin-version = "2.1.0"
 ktor-version = "3.0.2"
 logback-version = "1.4.14"
 koin = "4.0.0"
+firebase-admin = "9.2.0"
+auth0 = "4.4.0"
+netty = "4.1.108.Final"
+guava = "32.0.0-jre"
+protobuf-java = "4.28.2"
 
 [libraries]
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation-jvm", version.ref = "ktor-version" }
@@ -16,6 +21,12 @@ kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 koin-logger = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
+firebase-admin = { module = "com.google.firebase:firebase-admin", version.ref = "firebase-admin" }
+auth0 = { module = "com.auth0:java-jwt", version.ref = "auth0" }
+netty-http = { module = "io.netty:netty-codec-http", version.ref = "netty" }
+netty-common = { module = "io.netty:netty-common", version.ref = "netty" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
+protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf-java" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }

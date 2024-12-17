@@ -27,14 +27,16 @@ dependencies {
     implementation(libs.ktor.server.config.yaml)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
-    implementation("com.google.firebase:firebase-admin:9.2.0")
-    implementation("com.google.guava:guava:32.0.0-jre")
-    implementation("com.google.protobuf:protobuf-java:4.28.2")
-    implementation("com.google.cloud:google-cloud-secretmanager:2.53.0")
+    implementation(libs.firebase.admin)
+    implementation(libs.netty.http)
+    implementation(libs.netty.common)
+    implementation(libs.guava)
+    implementation(libs.protobuf.java)
     implementation(libs.koin.ktor)
     implementation(libs.koin.core)
     implementation(libs.koin.logger)
-    implementation("com.auth0:java-jwt:4.4.0")
+    implementation(libs.auth0)
+    implementation("com.google.cloud:google-cloud-firestore:3.14.0")
 }
 
 ktor {
