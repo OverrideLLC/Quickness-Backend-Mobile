@@ -9,13 +9,21 @@ import com.google.firebase.cloud.FirestoreClient
 import org.koin.dsl.module
 
 /**
- * Dependency injection module for Firebase services.
+ * Dependency Injection (DI) module for Firebase services.
  *
- * Provides single instances of [FirebaseAuth] and [Firestore], ensuring proper initialization of FirebaseApp.
+ * This module provides singleton instances of [FirebaseAuth] and [Firestore],
+ * ensuring that Firebase is properly initialized and reused across the application.
+ *
+ * The module guarantees that the FirebaseApp is only initialized once, and the
+ * instances of [FirebaseAuth] and [Firestore] are safely retrieved.
  */
 val FirebaseModule = module {
+
     /**
      * Provides a singleton instance of [FirebaseAuth].
+     *
+     * This method initializes FirebaseApp and returns a [FirebaseAuth] instance
+     * for managing user authentication.
      */
     single<FirebaseAuth> {
         FirebaseAuth.getInstance(initFirebaseApp())
@@ -23,6 +31,9 @@ val FirebaseModule = module {
 
     /**
      * Provides a singleton instance of [Firestore].
+     *
+     * This method initializes FirebaseApp and returns a [Firestore] instance
+     * for interacting with the Firestore database.
      */
     single<Firestore> {
         FirestoreClient.getFirestore(initFirebaseApp())
@@ -32,35 +43,37 @@ val FirebaseModule = module {
 /**
  * Initializes and returns the default [FirebaseApp].
  *
- * Ensures that a Firebase app is initialized only once during the application lifecycle. If an instance
- * already exists, it reuses the existing app. Otherwise, it initializes a new instance with default credentials
- * and project settings.
+ * Ensures that the Firebase app is initialized only once during the application's lifecycle.
+ * If an instance already exists, it reuses the existing app. If no instance exists,
+ * a new one is initialized with the default credentials and project settings.
  *
  * @return The initialized or existing [FirebaseApp].
- * @throws IllegalStateException If default credentials cannot be obtained or the app fails to initialize.
+ * @throws IllegalStateException If default credentials cannot be obtained or if the app fails to initialize.
  */
 private fun initFirebaseApp(): FirebaseApp {
     // Check if a FirebaseApp instance already exists.
     val existingApp = FirebaseApp.getApps().firstOrNull { it.name == FirebaseApp.DEFAULT_APP_NAME }
+
+    // If an app already exists, reuse it.
     if (existingApp != null) {
         println("Using existing FirebaseApp: ${existingApp.name}")
         return existingApp
     }
 
-    // Load default Google credentials.
+    // Load Google default credentials.
     val credentials = try {
         GoogleCredentials.getApplicationDefault()
     } catch (e: Exception) {
         throw IllegalStateException("Error obtaining Google default credentials: ${e.message}", e)
     }
 
-    // Configure Firebase options.
+    // Configure FirebaseOptions with the obtained credentials and project ID.
     val options = FirebaseOptions.builder()
-        .setProjectId("quickness-backend-7f4ac")
+        .setProjectId("quickness-backend-7f4ac") // Replace with your Firebase project ID.
         .setCredentials(credentials)
         .build()
 
-    // Initialize the FirebaseApp.
+    // Initialize FirebaseApp and return it.
     return FirebaseApp.initializeApp(options)
         ?: throw IllegalStateException("Failed to initialize FirebaseApp")
 }

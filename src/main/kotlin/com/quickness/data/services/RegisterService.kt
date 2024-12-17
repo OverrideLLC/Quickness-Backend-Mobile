@@ -10,33 +10,38 @@ import kotlinx.serialization.json.buildJsonObject
 /**
  * Service responsible for registering users in the system.
  *
- * @property firebaseAuth Firebase Authentication instance to manage user creation.
- * @property firestore Firestore instance for database interactions.
+ * This service handles the process of user registration by first creating a new user in Firebase Authentication,
+ * then storing additional user details in Firestore.
+ *
+ * @property firebaseAuth The Firebase Authentication instance used to create and manage users.
+ * @property firestore The Firestore instance used to store user-related data.
  */
 class RegisterService(
     private val firebaseAuth: FirebaseAuth,
-    private val firestore: Firestore,
+    private val firestore: Firestore
 ) {
+
     /**
      * Registers a new user based on the provided [RegisterRequest].
      *
-     * This function performs the following steps:
-     * 1. Creates a new Firebase user.
-     * 2. Stores additional user data in the Firestore database.
+     * This method performs the following steps:
+     * 1. Creates a new Firebase user with the provided email and password.
+     * 2. Stores the user's additional data (name, CURP, balance, etc.) in Firestore.
      *
-     * If any error occurs during the process, an appropriate error response is returned.
+     * If an error occurs during the process, the function returns an [ApiResponse] with the appropriate error message.
      *
-     * @param registerUserRequest The request containing user registration details.
+     * @param registerUserRequest The request containing the details of the user to be registered.
      * @return An [ApiResponse] indicating the success or failure of the registration process.
      */
     fun registerUser(registerUserRequest: RegisterRequest): ApiResponse {
         return try {
-            // Step 1: Create a new Firebase user.
+            // Step 1: Create a new Firebase user
             val userRecordRequest = UserRecord.CreateRequest()
                 .setEmail(registerUserRequest.email)
                 .setPassword(registerUserRequest.password)
                 .setPhoneNumber(registerUserRequest.phone)
 
+            // Attempt to create the Firebase user, and handle any exceptions that may occur.
             val userRecord = runCatching {
                 firebaseAuth.createUser(userRecordRequest)
             }.getOrElse { exception ->
@@ -47,16 +52,17 @@ class RegisterService(
                 )
             }
 
-            // Step 2: Add user data to Firestore.
+            // Step 2: Add user data to Firestore
             val userData = mapOf(
                 "name" to registerUserRequest.name,
                 "curp" to registerUserRequest.curp,
-                "balance" to 0.0,
-                "id_token" to "TOKENID",
-                "id_token_cards" to "TOKENID",
-                "credits_cards" to 0
+                "balance" to 0.0,  // Default balance
+                "id_token" to "TOKENID",  // Placeholder for id_token
+                "id_token_cards" to "TOKENID",  // Placeholder for id_token_cards
+                "credits_cards" to 0  // Default credits
             )
 
+            // Attempt to store the user data in Firestore, handling any errors.
             runCatching {
                 firestore.collection("Users").document(userRecord.uid).set(userData).get()
             }.onSuccess {
@@ -73,14 +79,14 @@ class RegisterService(
                 )
             }
 
-            // Default response if something goes wrong.
+            // If we reach this point, something went wrong, and a generic error response is returned.
             ApiResponse(
                 message = "Unexpected error occurred",
                 status = 500,
                 data = buildJsonObject { }
             )
         } catch (e: Exception) {
-            // General exception handling.
+            // General exception handling: return a response with the error message.
             ApiResponse(
                 message = "Error: ${e.message}",
                 status = 500,
