@@ -1,41 +1,70 @@
-# backend
+# Backend Mobile API
 
-This project was created using the [Ktor Project Generator](https://start.ktor.io).
+Backend para la aplicación móvil de *QUICKNESS*, que proporciona funcionalidades como autenticación, gestión de usuarios y acceso a datos en tiempo real.
 
-Here are some useful links to get you started:
+## Tecnologías y Stack
+- **Lenguaje:** Kotlin
+- **Framework:** Ktor
+- **Base de datos:** Firebase
+- **Autenticación:** JWT (JSON Web Token)
+- **API:** RESTful
 
-- [Ktor Documentation](https://ktor.io/docs/home.html)
-- [Ktor GitHub page](https://github.com/ktorio/ktor)
-- The [Ktor Slack chat](https://app.slack.com/client/T09229ZC6/C0A974TJ9). You'll need to [request an invite](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up) to join.
+## Instalación
 
-## Features
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/Quickness-dev/backend-mobile.git
+   ```
 
-Here's a list of features included in this project:
+2. Accede a la carpeta del proyecto:
+   ```bash
+   cd repo
+   ```
 
-| Name                                                                   | Description                                                                        |
-| ------------------------------------------------------------------------|------------------------------------------------------------------------------------ |
-| [Content Negotiation](https://start.ktor.io/p/content-negotiation)     | Provides automatic content conversion according to Content-Type and Accept headers |
-| [Routing](https://start.ktor.io/p/routing)                             | Provides a structured routing DSL                                                  |
-| [kotlinx.serialization](https://start.ktor.io/p/kotlinx-serialization) | Handles JSON serialization using kotlinx.serialization library                     |
+3. Configura las variables de entorno:
+   ```bash
+   DB_URI=mongodb://localhost:27017/mydb
+   JWT_SECRET=mysecret
+   ```
 
-## Building & Running
+### d. **Uso**
 
-To build or run the project, use one of the following tasks:
+Ejemplo:
+**POST /auth**
+- Autenticación de usuarios.
+- Request:
+```json
+  {
+    "token": "jwt_firebase_token"
+  }
+  ```
+- Response:
+  ```json
+  {
+    "message": "Autenticación exitosa",
+    "status": "200",
+    "data": "jwt_token_generado"
+  }
+  ```
 
-| Task                          | Description                                                          |
-| -------------------------------|---------------------------------------------------------------------- |
-| `./gradlew test`              | Run the tests                                                        |
-| `./gradlew build`             | Build everything                                                     |
-| `buildFatJar`                 | Build an executable JAR of the server with all dependencies included |
-| `buildImage`                  | Build the docker image to use with the fat JAR                       |
-| `publishImageToLocalRegistry` | Publish the docker image locally                                     |
-| `run`                         | Run the server                                                       |
-| `runDocker`                   | Run using the local docker image                                     |
-
-If the server starts successfully, you'll see the following output:
-
-```
-2024-12-04 14:32:45.584 [main] INFO  Application - Application started in 0.303 seconds.
-2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
-```
+**POST /register**
+- Registro de usuarios.
+- Request:
+```json
+  {
+    "email": "example@example.com",
+    "password": "password123",
+    "name": "John Doe Fulan",
+    "phone": "+52 123-456-7890",
+    "curp": "CURP1234567890"
+  }
+  ```
+- Response:
+  ```json
+  {
+    "message": "Registro exitoso",
+    "status": "200",
+    "data": ""
+  }
+  ```
 
