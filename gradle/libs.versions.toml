@@ -1,13 +1,14 @@
 [versions]
 kotlin-version = "2.1.0"
 ktor-version = "3.0.2"
-logback-version = "1.4.14"
+logback-version = "1.5.13"
 koin = "4.0.0"
 firebase-admin = "9.2.0"
 auth0 = "4.4.0"
-netty = "4.1.108.Final"
+netty = "4.1.115.Final"
 guava = "32.0.0-jre"
 protobuf-java = "4.28.2"
+google-cloud-bom = "26.45.0"
 
 [libraries]
 ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation-jvm", version.ref = "ktor-version" }
@@ -27,6 +28,9 @@ netty-http = { module = "io.netty:netty-codec-http", version.ref = "netty" }
 netty-common = { module = "io.netty:netty-common", version.ref = "netty" }
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
 protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf-java" }
+google-cloud-bom = { module = "com.google.cloud:libraries-bom", version.ref = "google-cloud-bom" }
+google-cloud-secretmanager = { module = "com.google.cloud:google-cloud-secretmanager" }
+google-cloud-firestore = { module = "com.google.cloud:google-cloud-firestore" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }

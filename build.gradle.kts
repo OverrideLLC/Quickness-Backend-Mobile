@@ -36,7 +36,10 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.logger)
     implementation(libs.auth0)
-    implementation("com.google.cloud:google-cloud-firestore:3.14.0")
+    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
+    implementation(platform(libs.google.cloud.bom))
+    implementation(libs.google.cloud.firestore)
+    implementation(libs.google.cloud.secretmanager)
 }
 
 ktor {
