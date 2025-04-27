@@ -1,7 +1,10 @@
 package com.quickness.di.modules
 
+import com.google.firebase.auth.FirebaseAuth
 import com.quickness.data.services.AuthService
+import com.quickness.data.services.JwtService
 import com.quickness.data.services.RegisterService
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 /**
@@ -19,7 +22,7 @@ val ServiceModule = module {
      * This service is responsible for managing user authentication-related operations, such as verifying
      * tokens and generating JWT tokens for authenticated users.
      */
-    single { AuthService(get()) }
+    single { AuthService(get<FirebaseAuth>(), get<JwtService>()) }
 
     /**
      * Provides a singleton instance of [RegisterService].
@@ -28,4 +31,6 @@ val ServiceModule = module {
      * and interacting with Firebase and Firestore.
      */
     single { RegisterService(get(), get()) }
+
+    singleOf(::JwtService)
 }

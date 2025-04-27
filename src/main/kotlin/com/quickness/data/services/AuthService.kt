@@ -13,7 +13,10 @@ import kotlinx.serialization.json.buildJsonObject
  *
  * @param firebaseAuth Instancia de [FirebaseAuth] que se utiliza para la verificación del token.
  */
-class AuthService(private val firebaseAuth: FirebaseAuth) {
+class AuthService(
+    private val firebaseAuth: FirebaseAuth,
+    private val jwtService: JwtService
+) {
 
     /**
      * Verifica el token de identificación proporcionado por el usuario y genera un JWT
@@ -29,7 +32,7 @@ class AuthService(private val firebaseAuth: FirebaseAuth) {
             val userId = decodedToken.uid
 
             // Generar un JWT utilizando el UID del usuario
-            val jwt = JwtService().generateJwt(userId)
+            val jwt = jwtService.generateJwt(userId)
 
             // Retornar respuesta con el JWT
             ApiResponse(

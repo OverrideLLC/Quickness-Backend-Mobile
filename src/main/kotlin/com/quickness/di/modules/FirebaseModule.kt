@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.cloud.FirestoreClient
+import com.quickness.data.services.GoogleService.initFirebaseApp
 import org.koin.dsl.module
 
 /**
@@ -26,7 +27,7 @@ val FirebaseModule = module {
      * for managing user authentication.
      */
     single<FirebaseAuth> {
-        FirebaseAuth.getInstance(initFirebaseApp())
+        FirebaseAuth.getInstance(get<FirebaseApp>())
     }
 
     /**
@@ -36,6 +37,6 @@ val FirebaseModule = module {
      * for interacting with the Firestore database.
      */
     single<Firestore> {
-        FirestoreClient.getFirestore(initFirebaseApp())
+        FirestoreClient.getFirestore(get<FirebaseApp>())
     }
 }

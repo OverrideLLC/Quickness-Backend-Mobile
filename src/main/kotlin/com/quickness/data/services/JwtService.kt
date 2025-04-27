@@ -2,22 +2,25 @@ package com.quickness.data.services
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.quickness.data.repository.GoogleRepository
 import com.quickness.utils.Constants
-import java.io.File
 import java.security.KeyFactory
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
-import java.util.Base64
-import java.util.Date
+import java.util.*
 
-class JwtService {
+class JwtService(
+    private val googleRepository: GoogleRepository
+) {
     private fun getPublicKey(): RSAPublicKey {
-        val publicKeyPEM = File("C:\\Users\\chris\\publica.pem").readText()
-            .replace("-----BEGIN PUBLIC KEY-----", "")
-            .replace("-----END PUBLIC KEY-----", "")
-            .replace("\\s".toRegex(), "")
+        val publicKeyPEM = googleRepository.getSecret("projects/322358291466/secrets/public_key_rs256_jwt/versions/1")
+            ?.replace("-----BEGIN PUBLIC KEY-----", "")
+            ?.replace("-----END PUBLIC KEY-----", "")
+            ?.replace("\\s".toRegex(), "")
+
+        if (publicKeyPEM.isNullOrBlank()) throw RuntimeException("Public key not found")
 
         val keyBytes = Base64.getDecoder().decode(publicKeyPEM)
         val keySpec = X509EncodedKeySpec(keyBytes)
@@ -26,10 +29,12 @@ class JwtService {
     }
 
     private fun getPrivateKey(): RSAPrivateKey {
-        val privateKeyPEM = File("C:\\Users\\chris\\privada.pem").readText()
-            .replace("-----BEGIN PRIVATE KEY-----", "")
-            .replace("-----END PRIVATE KEY-----", "")
-            .replace("\\s".toRegex(), "")
+        val privateKeyPEM = googleRepository.getSecret("projects/322358291466/secrets/private_key_rs256_jwt/versions/1")
+            ?.replace("-----BEGIN PRIVATE KEY-----", "")
+            ?.replace("-----END PRIVATE KEY-----", "")
+            ?.replace("\\s".toRegex(), "")
+
+        if (privateKeyPEM.isNullOrBlank()) throw RuntimeException("Public key not found")
 
         val keyBytes = Base64.getDecoder().decode(privateKeyPEM)
         val keySpec = PKCS8EncodedKeySpec(keyBytes)
@@ -47,8 +52,13 @@ class JwtService {
             .withIssuer(Constants.ISSUER)
             .withAudience(Constants.AUDIENCE)
             .withSubject(uid)
-            .withClaim("device", "")
-            .withClaim("role", Constants.ROLE)
+            .withClaim(
+                "claims", mapOf(
+                    "device" to "a663f453486645cda2cea6f868cab7",
+                    "role" to Constants.ROLE
+                )
+            )
+            .withIssuedAt(now)
             .withIssuedAt(now)
             .withExpiresAt(Date(now.time + Constants.EXPIRATION_TIME))
             .sign(algorithm)

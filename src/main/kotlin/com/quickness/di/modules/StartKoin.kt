@@ -20,7 +20,8 @@ fun Application.configureKoin() {
         modules(
             FirebaseModule,   // Module for Firebase services and configuration
             RepositoryModule, // Module for repository classes
-            ServiceModule     // Module for service classes
+            ServiceModule,     // Module for service classes
+            gcloudModule       // Module for Google Cloud services
         )
     }
 }

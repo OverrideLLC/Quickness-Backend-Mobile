@@ -2,6 +2,8 @@ package com.quickness.di.modules
 
 import com.quickness.data.repository.AuthRepository
 import com.quickness.data.repository.AuthRepositoryImpl
+import com.quickness.data.repository.GoogleRepository
+import com.quickness.data.repository.GoogleRepositoryImpl
 import com.quickness.data.repository.RegisterRepository
 import com.quickness.data.repository.RegisterRepositoryImpl
 import org.koin.dsl.module
@@ -31,4 +33,6 @@ val RepositoryModule = module {
      * creating new users, storing their data, and interacting with external services.
      */
     single<RegisterRepository> { RegisterRepositoryImpl(get()) }
+
+    single<GoogleRepository> { GoogleRepositoryImpl(get()) }
 }
